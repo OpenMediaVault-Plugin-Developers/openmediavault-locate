@@ -3,7 +3,7 @@
  * @author    Volker Theile <volker.theile@openmediavault.org>
  * @author    OpenMediaVault Plugin Developers <plugins@omv-extras.org>
  * @copyright Copyright (c) 2009-2013 Volker Theile
- * @copyright Copyright (c) 2015 OpenMediaVault Plugin Developers
+ * @copyright Copyright (c) 2015-2016s OpenMediaVault Plugin Developers
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -109,7 +109,7 @@ Ext.define("OMV.module.admin.service.locate.Search", {
             icon    : "images/search.png",
             iconCls : Ext.baseCSSPrefix + "btn-icon-16x16",
             handler : Ext.Function.bind(me.onSearch, me, [ me ]),
-            scope   : me  
+            scope   : me
         }]);
         return items;
     },
@@ -118,7 +118,7 @@ Ext.define("OMV.module.admin.service.locate.Search", {
         var store = this.createStore();
         this.reconfigure(store, Ext.clone(this.columnsTpl));
         this.initState();
-        this.getPagingToolbar().bindStore(this.store);        
+        this.getPagingToolbar().bindStore(this.store);
     }
 });
 

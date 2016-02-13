@@ -3,7 +3,7 @@
  * @author    Volker Theile <volker.theile@openmediavault.org>
  * @author    OpenMediaVault Plugin Developers <plugins@omv-extras.org>
  * @copyright Copyright (c) 2009-2013 Volker Theile
- * @copyright Copyright (c) 2015 OpenMediaVault Plugin Developers
+ * @copyright Copyright (c) 2015-2016 OpenMediaVault Plugin Developers
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ class OMVRpcServiceLocate extends OMVRpcServiceAbstract
 
     private function getXPath()
     {
-        return sprintf( "//services/%s", $this->getPluginName() );
+        return sprintf( "/config/services/%s", $this->getPluginName() );
     }
 
     private function getEventMessagePath()
@@ -65,7 +65,7 @@ class OMVRpcServiceLocate extends OMVRpcServiceAbstract
         // Validate the RPC caller context.
         $this->validateMethodContext(
             $context,
-            array( "role" => OMV_ROLE_ADMINISTRATOR )
+            [ "role" => OMV_ROLE_ADMINISTRATOR ]
         );
 
         // Validate the parameters of the RPC service method.
@@ -80,14 +80,12 @@ class OMVRpcServiceLocate extends OMVRpcServiceAbstract
             }
         }');
 
-        $results = array();
+        $results = [];
 
-        if (strlen($params['term']) > 2)
-        {
+        if (strlen($params['term']) > 2) {
             $cmd = sprintf("%s -i %s", $this->getLocate(), $params['term']);
 
-            if (0 !== $this->exec($cmd, $output))
-            {
+            if (0 !== $this->exec($cmd, $output)) {
                 throw new OMVException(
                     OMVErrorMsg::E_EXEC_FAILED,
                     $cmd,
@@ -95,22 +93,19 @@ class OMVRpcServiceLocate extends OMVRpcServiceAbstract
                 );
             }
 
-            foreach ($output as $line)
-            {
+            foreach ($output as $line) {
                 if (empty($line))
                     continue;
 
                 // Prepare configuration data.
-                $results[] = array(
+                $results[] = [
                     "file" => trim($line)
-                );
+                ];
             }
-        }
-        else
-        {
-            $results[] = array(
+        } else {
+            $results[] = [
                 "file" => "Search must use at least three characters."
-            );
+            ];
         }
 
         // Filter the result.
