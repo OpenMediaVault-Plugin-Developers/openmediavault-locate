@@ -84,27 +84,26 @@ class OMVRpcServiceLocate extends OMVRpcServiceAbstract
 
         if (strlen($params['term']) > 2) {
             $cmd = sprintf("%s -i %s", $this->getLocate(), $params['term']);
+            $this->exec($cmd, $output);
 
-            if (0 !== $this->exec($cmd, $output)) {
-                throw new OMVException(
-                    OMVErrorMsg::E_EXEC_FAILED,
-                    $cmd,
-                    implode("\n", $output)
-                );
-            }
-
-            foreach ($output as $line) {
-                if (empty($line))
-                    continue;
-
-                // Prepare configuration data.
+            if (empty($output)) {
                 $results[] = [
-                    "file" => trim($line)
+                    "file" => gettext("No results found.")
                 ];
+            } else {
+                foreach ($output as $line) {
+                    if (empty($line))
+                        continue;
+
+                    // Prepare configuration data.
+                    $results[] = [
+                        "file" => trim($line)
+                    ];
+                }
             }
         } else {
             $results[] = [
-                "file" => "Search must use at least three characters."
+                "file" => gettext("Search must use at least three characters.")
             ];
         }
 
