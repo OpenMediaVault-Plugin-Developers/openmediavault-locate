@@ -3,7 +3,7 @@
  * @author    Volker Theile <volker.theile@openmediavault.org>
  * @author    OpenMediaVault Plugin Developers <plugins@omv-extras.org>
  * @copyright Copyright (c) 2009-2013 Volker Theile
- * @copyright Copyright (c) 2015-2016s OpenMediaVault Plugin Developers
+ * @copyright Copyright (c) 2015-2016 OpenMediaVault Plugin Developers
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,13 +18,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-// require("js/omv/WorkspaceManager.js")
-// require("js/omv/workspace/grid/Panel.js")
-// require("js/omv/workspace/window/Form.js")
 // require("js/omv/Rpc.js")
+// require("js/omv/WorkspaceManager.js")
 // require("js/omv/data/Store.js")
 // require("js/omv/data/Model.js")
 // require("js/omv/data/proxy/Rpc.js")
+// require("js/omv/window/MessageBox.js")
+// require("js/omv/workspace/grid/Panel.js")
+// require("js/omv/workspace/window/Form.js")
 
 Ext.define("OMV.module.admin.service.locate.Search", {
     extend   : "OMV.workspace.grid.Panel",
@@ -99,7 +100,7 @@ Ext.define("OMV.module.admin.service.locate.Search", {
                 },
                 specialkey : function(field, e) {
                     if (e.getKey() == e.ENTER) {
-                        me.onSearch();
+                        me.onSearchButton();
                     }
                 }
             }
@@ -108,17 +109,42 @@ Ext.define("OMV.module.admin.service.locate.Search", {
             text    : _("Search"),
             icon    : "images/search.png",
             iconCls : Ext.baseCSSPrefix + "btn-icon-16x16",
-            handler : Ext.Function.bind(me.onSearch, me, [ me ]),
+            handler : Ext.Function.bind(me.onSearchButton, me, [ me ]),
+            scope   : me
+        },{
+            xtype   : "button",
+            text    : _("Update"),
+            icon    : "images/refresh.png",
+            iconCls : Ext.baseCSSPrefix + "btn-icon-16x16",
+            handler : Ext.Function.bind(me.onUpdateButton, me, [ me ]),
             scope   : me
         }]);
         return items;
     },
 
-    onSearch : function () {
+    onSearchButton : function () {
         var store = this.createStore();
         this.reconfigure(store, Ext.clone(this.columnsTpl));
         this.initState();
         this.getPagingToolbar().bindStore(this.store);
+    },
+
+    onUpdateButton : function() {
+        var me = this;
+        OMV.MessageBox.wait(null, _("Updating file database ..."));
+        OMV.Rpc.request({
+            scope       : me,
+            relayErrors : false,
+            rpcData     : {
+                service  : "Locate",
+                method   : "executeUpdate"
+            },
+            success : function(id, success, response) {
+                me.doReload();
+                me.onSearchButton();
+                OMV.MessageBox.hide();
+            }
+        });
     }
 });
 

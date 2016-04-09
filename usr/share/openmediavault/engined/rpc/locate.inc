@@ -56,6 +56,7 @@ class OMVRpcServiceLocate extends OMVRpcServiceAbstract
     public function initialize()
     {
         $this->registerMethod('executeSearch');
+        $this->registerMethod('executeUpdate');
     }
 
     public function executeSearch($params, $context)
@@ -110,6 +111,34 @@ class OMVRpcServiceLocate extends OMVRpcServiceAbstract
         // Filter the result.
         return $this->applyFilter($results, $params['start'], $params['limit'],
             $params['sortfield'], $params['sortdir']);
+    }
+
+    public function executeUpdate($params, $context)
+    {
+        // Validate the RPC caller context.
+        $this->validateMethodContext(
+            $context,
+            array( "role" => OMV_ROLE_ADMINISTRATOR )
+        );
+        // Create a background process.
+        $bgStatusFilename = $this->createBgProcStatus();
+        $pid = $this->fork();
+        if ($pid > 0)   // Parent process.
+        {
+            $this->initializeBgProcStatus($bgStatusFilename, $pid);
+            return $bgStatusFilename;
+        }
+        // Child process.
+        try {
+            $bgOutputFilename = $this->createBgProcOutput();
+            $this->updateBgProcStatus($bgStatusFilename, "outputfilename", $bgOutputFilename);
+            $cmd = "export LANG=C; /usr/bin/updatedb 2>&1";
+            $this->exec($cmd, $output, $bgOutputFilename);
+            $this->finalizeBgProcStatus($bgStatusFilename, $output);
+        } catch(Exception $e) {
+            $this->finalizeBgProcStatus($bgStatusFilename, "", $e);
+            exit(1);
+        }
     }
 }
 
