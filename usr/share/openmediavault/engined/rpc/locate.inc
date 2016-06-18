@@ -44,8 +44,9 @@ class OMVRpcServiceLocate extends \OMV\Rpc\ServiceAbstract
         $results = [];
 
         if (strlen($params['term']) > 2) {
-            $cmd = sprintf("/usr/bin/mlocate -i %s", escapeshellarg($params['term']));
-            $this->exec($cmd, $output);
+            $cmd = new \OMV\System\Process("mlocate", "-i", escapeshellarg($params['term']));
+            $cmd->setRedirect2to1();
+            $cmd->execute($output);
 
             if (empty($output)) {
                 $results[] = [

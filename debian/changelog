@@ -1,3 +1,9 @@
+openmediavault-locate (3.1) stable; urgency=low
+
+  * Use better method to execute search command
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Sat, 18 Jun 2016 08:40:23 -0500
+
 openmediavault-locate (3.0) stable; urgency=low
 
   * Update for OMV 3.0.15
