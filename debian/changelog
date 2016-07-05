@@ -1,3 +1,9 @@
+openmediavault-locate (3.2) stable; urgency=low
+
+  * Fix error output when no results found.
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Tue, 05 Jul 2016 08:54:07 -0500
+
 openmediavault-locate (3.1) stable; urgency=low
 
   * Use better method to execute search command

@@ -45,7 +45,7 @@ class OMVRpcServiceLocate extends \OMV\Rpc\ServiceAbstract
 
         if (strlen($params['term']) > 2) {
             $cmd = new \OMV\System\Process("mlocate", "-i", escapeshellarg($params['term']));
-            $cmd->setRedirect2to1();
+            $cmd->setQuiet(true);
             $cmd->execute($output);
 
             if (empty($output)) {
@@ -79,7 +79,9 @@ class OMVRpcServiceLocate extends \OMV\Rpc\ServiceAbstract
         // Validate the RPC caller context.
         $this->validateMethodContext($context, ["role" => OMV_ROLE_ADMINISTRATOR]);
 
-        $cmd = "export LANG=C; /usr/bin/updatedb 2>&1";
-        exec($cmd, $out);
+        $cmd = new \OMV\System\Process("updatedb");
+        //$cmd->setQuiet(true);
+        $cmd->execute($output);
+        
     }
 }
