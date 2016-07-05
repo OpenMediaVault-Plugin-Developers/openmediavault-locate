@@ -80,8 +80,7 @@ class OMVRpcServiceLocate extends \OMV\Rpc\ServiceAbstract
         $this->validateMethodContext($context, ["role" => OMV_ROLE_ADMINISTRATOR]);
 
         $cmd = new \OMV\System\Process("updatedb");
-        //$cmd->setQuiet(true);
         $cmd->execute($output);
-        
+
     }
 }
