@@ -10,6 +10,6 @@ Homepage: http://omv-extras.org/
 Package: openmediavault-locate
 Architecture: all
 Depends: mlocate,
-         openmediavault (>= 3.0.21)
+         openmediavault (>= 3.0.40)
 Description: locate plugin for OpenMediaVault.
  Locate file on system using search term.
