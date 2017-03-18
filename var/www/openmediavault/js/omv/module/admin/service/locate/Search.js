@@ -3,7 +3,7 @@
  * @author    Volker Theile <volker.theile@openmediavault.org>
  * @author    OpenMediaVault Plugin Developers <plugins@omv-extras.org>
  * @copyright Copyright (c) 2009-2013 Volker Theile
- * @copyright Copyright (c) 2015-2016 OpenMediaVault Plugin Developers
+ * @copyright Copyright (c) 2015-2017 OpenMediaVault Plugin Developers
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ Ext.define("OMV.module.admin.service.locate.Search", {
     stateId           : "bdb1c917-2ed1-4f59-c67f-bc2ef3ab2a5a",
 
     columnsTpl : [{
+        xtype     : "textcolumn",
         text      : _("File / Directory"),
         sortable  : false,
         dataIndex : "file",
