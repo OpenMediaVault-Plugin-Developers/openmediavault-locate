@@ -5,6 +5,8 @@ set -e
 . /etc/default/openmediavault
 . /usr/share/openmediavault/scripts/helper-functions
 
+UPDATEDB_CONFIG="/etc/updatedb.conf"
+
 case "$1" in
     configure)
         SERVICE_XPATH_NAME="locate"
@@ -14,7 +16,13 @@ case "$1" in
             omv_config_add_node "/config/services" "${SERVICE_XPATH_NAME}"
         fi
 
-        omv-mkconf ${SERVICE_XPATH_NAME}
+        # Create updatedb config file
+        cat <<EOF > ${UPDATEDB_CONFIG}
+# this file was automatically generated
+PRUNE_BIND_MOUNTS="yes"
+PRUNEPATHS="/dev /export /mnt /proc /selinux /sys /tmp /var/spool"
+PRUNEFS="NFS nfs nfs4 rpc_pipefs afs binfmt_misc proc smbfs autofs iso9660 ncpfs coda devpts ftpfs devfs mfs shfs sysfs cifs lustre_lite tmpfs usbfs udf fuse.glusterfs fuse.sshfs curlftpfs"
+EOF
 
         echo "Updating database. This may take a while..."
         /usr/bin/updatedb
