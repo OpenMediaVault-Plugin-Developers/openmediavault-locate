@@ -9,13 +9,6 @@ UPDATEDB_CONFIG="/etc/updatedb.conf"
 
 case "$1" in
     configure)
-        SERVICE_XPATH_NAME="locate"
-        SERVICE_XPATH="/config/services/${SERVICE_XPATH_NAME}"
-
-        if ! omv_config_exists "${SERVICE_XPATH}"; then
-            omv_config_add_node "/config/services" "${SERVICE_XPATH_NAME}"
-        fi
-
         # Create updatedb config file
         cat <<EOF > ${UPDATEDB_CONFIG}
 # this file was automatically generated
@@ -27,8 +20,7 @@ EOF
         echo "Updating database. This may take a while..."
         /usr/bin/updatedb
 
-        dpkg-trigger update-fixperms
-        dpkg-trigger update-locale
+        dpkg-trigger update-workbench
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

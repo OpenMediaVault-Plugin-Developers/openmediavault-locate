@@ -1,0 +1,7 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "services.locate"
+  text: _("Locate")
+  icon: "mdi:folder-search-outline"
+  url: "/services/locate"

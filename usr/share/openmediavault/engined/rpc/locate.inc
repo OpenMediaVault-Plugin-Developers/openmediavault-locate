@@ -3,7 +3,7 @@
  * @author    Volker Theile <volker.theile@openmediavault.org>
  * @author    OpenMediaVault Plugin Developers <plugins@omv-extras.org>
  * @copyright Copyright (c) 2009-2013 Volker Theile
- * @copyright Copyright (c) 2015-2019 OpenMediaVault Plugin Developers
+ * @copyright Copyright (c) 2015-2021 OpenMediaVault Plugin Developers
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,21 +37,18 @@ class OMVRpcServiceLocate extends \OMV\Rpc\ServiceAbstract
         // Validate the RPC caller context.
         $this->validateMethodContext($context, ["role" => OMV_ROLE_ADMINISTRATOR]);
 
-        // Validate the parameters of the RPC service method.
-        $this->validateMethodParams($params, "rpc.locate.executesearch");
-
         $results = [];
 
-        if (strlen($params['term']) > 2) {
-            $cmd = new \OMV\System\Process("mlocate", "-i", escapeshellarg($params['term']));
+        if (strlen($params['search']) > 2) {
+            $cmdArgs = [];
+            $cmdArgs[] = "--ignore-case";
+            $cmdArgs[] = "--limit=500";
+            $cmdArgs[] = escapeshellarg($params['search']);
+            $cmd = new \OMV\System\Process("mlocate", $cmdArgs);
             $cmd->setQuiet(true);
             $cmd->execute($output);
 
-            if (empty($output)) {
-                $results[] = [
-                    "file" => gettext("No results found.")
-                ];
-            } else {
+            if (!empty($output)) {
                 foreach ($output as $line) {
                     if (empty($line))
                         continue;
@@ -70,7 +67,7 @@ class OMVRpcServiceLocate extends \OMV\Rpc\ServiceAbstract
 
         // Filter the result.
         return $this->applyFilter($results, $params['start'], $params['limit'],
-            $params['sortfield'], $params['sortdir']);
+            $params['sortfield'], $params['sortdir'], $params['search']);
     }
 
     public function executeUpdate($params, $context)

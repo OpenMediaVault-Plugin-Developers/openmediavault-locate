@@ -1,0 +1,31 @@
+version: "1.0"
+type: component
+data:
+  name: omv-services-locate-datatable-page
+  type: datatablePage
+  config:
+    autoReload: false
+    hasSearchField: true
+    remoteSearching: true
+    stateId: bdb1c917-2ed1-4f59-c67f-bc2ef3ab2a5a
+    store:
+      proxy:
+        service: Locate
+        get:
+          method: executeSearch
+    columns:
+      - name: _("File")
+        prop: file
+        flexGrow: 1
+        sortable: true
+    actions:
+      - type: iconButton
+        tooltip: _("Update")
+        icon: mdi:update
+        execute:
+          type: request
+          request:
+            service: Locate
+            method: executeUpdate
+            task: true
+            successUrl: /services/locate
