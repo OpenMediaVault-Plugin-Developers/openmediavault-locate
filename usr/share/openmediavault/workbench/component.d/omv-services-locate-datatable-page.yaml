@@ -27,5 +27,4 @@ data:
           request:
             service: Locate
             method: executeUpdate
-            task: true
             successUrl: /services/locate
