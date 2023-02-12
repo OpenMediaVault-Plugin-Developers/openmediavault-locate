@@ -44,7 +44,7 @@ class OMVRpcServiceLocate extends \OMV\Rpc\ServiceAbstract
             $cmdArgs[] = "--ignore-case";
             $cmdArgs[] = "--limit=500";
             $cmdArgs[] = escapeshellarg($params['search']);
-            $cmd = new \OMV\System\Process("mlocate", $cmdArgs);
+            $cmd = new \OMV\System\Process("locate", $cmdArgs);
             $cmd->setQuiet(true);
             $cmd->execute($output);
 
